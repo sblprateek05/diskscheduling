@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disk Scheduling Algorithms Visualizer</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- Hero Section -->
+    <div class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">Disk Scheduling Algorithms</h1>
+        <p class="hero-description">Interactive visualizations of how operating systems optimize disk access</p>
+        <button id="try-simulator-btn" class="hero-button">Try the Simulator</button>
+      </div>
+      <div class="hero-background">
+        <div class="hero-line-1"></div>
+        <div class="hero-line-2"></div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Introduction Section -->
+      <section id="introduction" class="section">
+        <h2 class="section-title">Understanding Disk Scheduling</h2>
+        <div class="intro-grid">
+          <div class="intro-text">
+            <p>
+              Disk scheduling is a crucial aspect of operating systems that determines the order in which disk I/O
+              requests are serviced. Efficient disk scheduling algorithms minimize seek time, which is the time
+              taken to locate the disk arm to the desired track where the data is stored.
+            </p>
+            <p>
+              The performance of a disk scheduling algorithm directly impacts system throughput, response time, and
+              overall efficiency. Different algorithms optimize for different scenarios, making it important to
+              understand their strengths and weaknesses.
+            </p>
+          </div>
+          <div class="key-concepts">
+            <h3>Key Concepts</h3>
+            <ul>
+              <li><strong>Seek Time:</strong> Time taken to move the disk head to the desired track</li>
+              <li><strong>Rotational Latency:</strong> Time waiting for the desired sector to rotate under the head</li>
+              <li><strong>Transfer Time:</strong> Time to transfer data between disk and system memory</li>
+              <li><strong>Disk Bandwidth:</strong> Total number of bytes transferred divided by total time</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Algorithm Sections -->
+      <section id="fcfs" class="algorithm-section" data-color="purple">
+        <div class="algorithm-header">
+          <div>
+            <h2 class="algorithm-title">FCFS (First-Come, First-Served)</h2>
+            <p class="algorithm-description">The simplest disk scheduling algorithm that services requests in the order they arrive in the disk queue.</p>
+          </div>
+          <button class="details-toggle-btn">Show Details</button>
+        </div>
+        <div class="algorithm-details hidden">
+          <div class="algorithm-grid">
+            <div class="algorithm-pros">
+              <h3>Pros</h3>
+              <ul>
+                <li>Simple to implement and understand</li>
+                <li>Fair to all requests</li>
+                <li>No starvation</li>
+              </ul>
+            </div>
+            <div class="algorithm-cons">
+              <h3>Cons</h3>
+              <ul>
+                <li>Can cause long seek times</li>
+                <li>Not optimized for performance</li>
+                <li>High average seek time</li>
+              </ul>
+            </div>
+            <div class="algorithm-implementation">
+              <h3>Implementation</h3>
+              <div>
+                <p>Time Complexity</p>
+                <p class="complexity">O(n)</p>
+              </div>
+              <div>
+                <p>Visualization</p>
+                <button class="try-algorithm-btn" data-algorithm="fcfs">Try in Simulator</button>
+              </div>
+            </div>
+          </div>
+          <div class="how-it-works">
+            <h3>How it works</h3>
+            <div class="algorithm-explanation">
+              <p>
+                FCFS is the simplest disk scheduling algorithm. In FCFS, requests are serviced according to their
+                arrival time in the disk queue.
+              </p>
+              <div class="algorithm-visualization">
+                <div class="disk-timeline"></div>
+                <div class="disk-head" style="left: 25%"></div>
+                <div class="disk-positions">
+                  <div class="disk-position" style="left: 0%">0</div>
+                  <div class="disk-position" style="left: 50%">100</div>
+                  <div class="disk-position" style="left: 100%">200</div>
+                </div>
+              </div>
+              <p>
+                The disk head simply moves from its current position to the position of the next request in the
+                queue, regardless of where that request is located. This can lead to long seek times if requests
+                are far apart.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="scan" class="algorithm-section" data-color="cyan">
+        <div class="algorithm-header">
+          <div>
+            <h2 class="algorithm-title">SCAN (Elevator Algorithm)</h2>
+            <p class="algorithm-description">The disk arm starts at one end and moves toward the other end, servicing requests along the way. When it reaches the other end, it reverses direction.</p>
+          </div>
+          <button class="details-toggle-btn">Show Details</button>
+        </div>
+        <div class="algorithm-details hidden">
+          <div class="algorithm-grid">
+            <div class="algorithm-pros">
+              <h3>Pros</h3>
+              <ul>
+                <li>Better performance than FCFS</li>
+                <li>Provides a more predictable wait time</li>
+                <li>Prevents starvation</li>
+              </ul>
+            </div>
+            <div class="algorithm-cons">
+              <h3>Cons</h3>
+              <ul>
+                <li>May cause long wait times for requests just visited</li>
+                <li>Favors inner and outer tracks</li>
+                <li>Not always optimal</li>
+              </ul>
+            </div>
+            <div class="algorithm-implementation">
+              <h3>Implementation</h3>
+              <div>
+                <p>Time Complexity</p>
+                <p class="complexity">O(n log n)</p>
+              </div>
+              <div>
+                <p>Visualization</p>
+                <button class="try-algorithm-btn" data-algorithm="scan">Try in Simulator</button>
+              </div>
+            </div>
+          </div>
+          <div class="how-it-works">
+            <h3>How it works</h3>
+            <div class="algorithm-explanation">
+              <p>
+                The SCAN algorithm (also known as the elevator algorithm) works by moving the disk arm in one
+                direction, servicing all requests in that direction, until it reaches the end of the disk. Then it
+                reverses direction and services requests in the other direction.
+              </p>
+              <div class="algorithm-visualization">
+                <div class="disk-timeline"></div>
+                <div class="disk-head" style="left: 25%"></div>
+                <div class="disk-positions">
+                  <div class="disk-position" style="left: 0%">0</div>
+                  <div class="disk-position" style="left: 50%">100</div>
+                  <div class="disk-position" style="left: 100%">200</div>
+                </div>
+                <div class="scan-arrow"></div>
+              </div>
+              <p>
+                This approach prevents the disk head from having to traverse the entire disk when a new request
+                comes in at the opposite end, which can significantly reduce average seek time compared to FCFS.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sstf" class="algorithm-section" data-color="pink">
+        <div class="algorithm-header">
+          <div>
+            <h2 class="algorithm-title">SSTF (Shortest Seek Time First)</h2>
+            <p class="algorithm-description">Always service the request closest to the current head position first to minimize seek time.</p>
+          </div>
+          <button class="details-toggle-btn">Show Details</button>
+        </div>
+        <div class="algorithm-details hidden">
+          <div class="algorithm-grid">
+            <div class="algorithm-pros">
+              <h3>Pros</h3>
+              <ul>
+                <li>Significantly reduces average seek time</li>
+                <li>Better performance than FCFS</li>
+                <li>Good for systems with many requests</li>
+              </ul>
+            </div>
+            <div class="algorithm-cons">
+              <h3>Cons</h3>
+              <ul>
+                <li>Can cause starvation for some requests</li>
+                <li>Overhead in calculating next closest request</li>
+                <li>Not optimal for all workloads</li>
+              </ul>
+            </div>
+            <div class="algorithm-implementation">
+              <h3>Implementation</h3>
+              <div>
+                <p>Time Complexity</p>
+                <p class="complexity">O(n²)</p>
+              </div>
+              <div>
+                <p>Visualization</p>
+                <button class="try-algorithm-btn" data-algorithm="sstf">Try in Simulator</button>
+              </div>
+            </div>
+          </div>
+          <div class="how-it-works">
+            <h3>How it works</h3>
+            <div class="algorithm-explanation">
+              <p>
+                The SSTF algorithm selects the request that requires the least disk head movement from the current
+                position, regardless of arrival time. This minimizes seek time but can lead to starvation of some
+                requests.
+              </p>
+              <div class="algorithm-visualization">
+                <div class="disk-timeline"></div>
+                <div class="disk-head" style="left: 25%"></div>
+                <div class="disk-positions">
+                  <div class="disk-position" style="left: 0%">0</div>
+                  <div class="disk-position" style="left: 50%">100</div>
+                  <div class="disk-position" style="left: 100%">200</div>
+                </div>
+                <div class="sstf-arrow"></div>
+              </div>
+              <p>
+                SSTF is essentially a greedy algorithm that always chooses the closest request. While this can
+                significantly reduce average seek time, it may cause indefinite postponement (starvation) of some
+                requests if new closer requests keep arriving.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="cscan" class="algorithm-section" data-color="blue">
+        <div class="algorithm-header">
+          <div>
+            <h2 class="algorithm-title">C-SCAN (Circular SCAN)</h2>
+            <p class="algorithm-description">The disk arm moves in one direction only, servicing requests until it reaches the end of the disk, then immediately returns to the beginning.</p>
+          </div>
+          <button class="details-toggle-btn">Show Details</button>
+        </div>
+        <div class="algorithm-details hidden">
+          <div class="algorithm-grid">
+            <div class="algorithm-pros">
+              <h3>Pros</h3>
+              <ul>
+                <li>More uniform wait time than SCAN</li>
+                <li>Good throughput for evenly distributed requests</li>
+                <li>Prevents starvation</li>
+              </ul>
+            </div>
+            <div class="algorithm-cons">
+              <h3>Cons</h3>
+              <ul>
+                <li>Higher seek overhead when jumping back to start</li>
+                <li>Not optimal for clustered requests</li>
+                <li>More complex implementation than SCAN</li>
+              </ul>
+            </div>
+            <div class="algorithm-implementation">
+              <h3>Implementation</h3>
+              <div>
+                <p>Time Complexity</p>
+                <p class="complexity">O(n log n)</p>
+              </div>
+              <div>
+                <p>Visualization</p>
+                <button class="try-algorithm-btn" data-algorithm="cscan">Try in Simulator</button>
+              </div>
+            </div>
+          </div>
+          <div class="how-it-works">
+            <h3>How it works</h3>
+            <div class="algorithm-explanation">
+              <p>
+                C-SCAN (Circular SCAN) is a variant of SCAN designed to provide more uniform wait time. The disk
+                arm moves in one direction only, servicing requests until it reaches the end of the disk, then
+                immediately returns to the beginning and starts again.
+              </p>
+              <div class="algorithm-visualization">
+                <div class="disk-timeline"></div>
+                <div class="disk-head" style="left: 25%"></div>
+                <div class="disk-positions">
+                  <div class="disk-position" style="left: 0%">0</div>
+                  <div class="disk-position" style="left: 50%">100</div>
+                  <div class="disk-position" style="left: 100%">200</div>
+                </div>
+                <div class="cscan-arrow"></div>
+              </div>
+              <p>
+                Unlike SCAN, C-SCAN doesn't reverse direction at the end of the disk. Instead, it returns to the
+                beginning without servicing any requests on the way back. This provides more uniform wait times
+                for sectors, as the head always moves in one direction when servicing requests.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="look" class="algorithm-section" data-color="amber">
+        <div class="algorithm-header">
+          <div>
+            <h2 class="algorithm-title">LOOK</h2>
+            <p class="algorithm-description">An improved version of SCAN that only goes as far as the last request in each direction, then reverses direction.</p>
+          </div>
+          <button class="details-toggle-btn">Show Details</button>
+        </div>
+        <div class="algorithm-details hidden">
+          <div class="algorithm-grid">
+            <div class="algorithm-pros">
+              <h3>Pros</h3>
+              <ul>
+                <li>Reduces unnecessary head movement compared to SCAN</li>
+                <li>Better performance than SCAN</li>
+                <li>Good for systems with requests not at disk extremes</li>
+              </ul>
+            </div>
+            <div class="algorithm-cons">
+              <h3>Cons</h3>
+              <ul>
+                <li>More complex implementation than SCAN</li>
+                <li>Can still cause long wait times for some requests</li>
+                <li>May not be optimal for all workloads</li>
+              </ul>
+            </div>
+            <div class="algorithm-implementation">
+              <h3>Implementation</h3>
+              <div>
+                <p>Time Complexity</p>
+                <p class="complexity">O(n log n)</p>
+              </div>
+              <div>
+                <p>Visualization</p>
+                <button class="try-algorithm-btn" data-algorithm="look">Try in Simulator</button>
+              </div>
+            </div>
+          </div>
+          <div class="how-it-works">
+            <h3>How it works</h3>
+            <div class="algorithm-explanation">
+              <p>
+                LOOK is an improved version of SCAN. Instead of going all the way to the end of the disk, the disk
+                arm only goes as far as the last request in each direction, then reverses direction.
+              </p>
+              <div class="algorithm-visualization">
+                <div class="disk-timeline"></div>
+                <div class="disk-head" style="left: 25%"></div>
+                <div class="disk-positions">
+                  <div class="disk-position" style="left: 0%">0</div>
+                  <div class="disk-position" style="left: 50%">100</div>
+                  <div class="disk-position" style="left: 100%">200</div>
+                </div>
+                <div class="look-arrow"></div>
+              </div>
+              <p>
+                By not going all the way to the end of the disk, LOOK reduces unnecessary head movement compared
+                to SCAN. This results in better performance, especially when there are no requests near the disk
+                boundaries.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="clook" class="algorithm-section" data-color="emerald">
+        <div class="algorithm-header">
+          <div>
+            <h2 class="algorithm-title">C-LOOK (Circular LOOK)</h2>
+            <p class="algorithm-description">An improved version of C-SCAN that only goes as far as the last request in the increasing direction, then jumps to the lowest request.</p>
+          </div>
+          <button class="details-toggle-btn">Show Details</button>
+        </div>
+        <div class="algorithm-details hidden">
+          <div class="algorithm-grid">
+            <div class="algorithm-pros">
+              <h3>Pros</h3>
+              <ul>
+                <li>Combines benefits of C-SCAN and LOOK</li>
+                <li>More uniform wait times than LOOK</li>
+                <li>Avoids unnecessary head movement</li>
+              </ul>
+            </div>
+            <div class="algorithm-cons">
+              <h3>Cons</h3>
+              <ul>
+                <li>Complex implementation</li>
+                <li>Jump to lowest request can be costly</li>
+                <li>May not be optimal for all workloads</li>
+              </ul>
+            </div>
+            <div class="algorithm-implementation">
+              <h3>Implementation</h3>
+              <div>
+                <p>Time Complexity</p>
+                <p class="complexity">O(n log n)</p>
+              </div>
+              <div>
+                <p>Visualization</p>
+                <button class="try-algorithm-btn" data-algorithm="clook">Try in Simulator</button>
+              </div>
+            </div>
+          </div>
+          <div class="how-it-works">
+            <h3>How it works</h3>
+            <div class="algorithm-explanation">
+              <p>
+                C-LOOK is to LOOK what C-SCAN is to SCAN. The disk arm only goes as far as the last request in the
+                increasing direction, then immediately jumps to the lowest request without servicing any requests
+                on the way back.
+              </p>
+              <div class="algorithm-visualization">
+                <div class="disk-timeline"></div>
+                <div class="disk-head" style="left: 25%"></div>
+                <div class="disk-positions">
+                  <div class="disk-position" style="left: 0%">0</div>
+                  <div class="disk-position" style="left: 50%">100</div>
+                  <div class="disk-position" style="left: 100%">200</div>
+                </div>
+                <div class="clook-arrow"></div>
+              </div>
+              <p>
+                C-LOOK provides more uniform wait times than LOOK while still avoiding unnecessary head movement.
+                It's particularly effective for systems with high throughput requirements and clustered requests.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="wscan" class="algorithm-section" data-color="violet">
+        <div class="algorithm-header">
+          <div>
+            <h2 class="algorithm-title">Weighted SCAN</h2>
+            <p class="algorithm-description">A variant of SCAN that assigns different priorities (weights) to requests, considering both position and weight when determining service order.</p>
+          </div>
+          <button class="details-toggle-btn">Show Details</button>
+        </div>
+        <div class="algorithm-details hidden">
+          <div class="algorithm-grid">
+            <div class="algorithm-pros">
+              <h3>Pros</h3>
+              <ul>
+                <li>Prioritizes important requests</li>
+                <li>Balances seek efficiency with request priority</li>
+                <li>Useful for systems with varying request importance</li>
+              </ul>
+            </div>
+            <div class="algorithm-cons">
+              <h3>Cons</h3>
+              <ul>
+                <li>Complex implementation</li>
+                <li>Requires weight assignment mechanism</li>
+                <li>May increase average seek time for low-priority requests</li>
+              </ul>
+            </div>
+            <div class="algorithm-implementation">
+              <h3>Implementation</h3>
+              <div>
+                <p>Time Complexity</p>
+                <p class="complexity">O(n log n)</p>
+              </div>
+              <div>
+                <p>Visualization</p>
+                <button class="try-algorithm-btn" data-algorithm="wscan">Try in Simulator</button>
+              </div>
+            </div>
+          </div>
+          <div class="how-it-works">
+            <h3>How it works</h3>
+            <div class="algorithm-explanation">
+              <p>
+                Weighted SCAN is a variant that assigns different priorities (weights) to requests. The algorithm
+                considers both the position and the weight of each request when determining the service order.
+              </p>
+              <div class="algorithm-visualization">
+                <div class="disk-timeline"></div>
+                <div class="disk-head" style="left: 25%"></div>
+                <div class="disk-positions">
+                  <div class="disk-position" style="left: 0%">0 (w:3)</div>
+                  <div class="disk-position" style="left: 50%">100 (w:8)</div>
+                  <div class="disk-position" style="left: 100%">200 (w:5)</div>
+                </div>
+              </div>
+              <p>
+                In Weighted SCAN, requests with higher weights are given priority. The algorithm balances between
+                minimizing seek time and servicing high-priority requests. This is useful in systems where some
+                requests are more important than others, such as real-time applications.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="nscan" class="algorithm-section" data-color="rose">
+        <div class="algorithm-header">
+          <div>
+            <h2 class="algorithm-title">N-Step SCAN</h2>
+            <p class="algorithm-description">Divides requests into batches of size N, processing each batch using SCAN before considering new requests.</p>
+          </div>
+          <button class="details-toggle-btn">Show Details</button>
+        </div>
+        <div class="algorithm-details hidden">
+          <div class="algorithm-grid">
+            <div class="algorithm-pros">
+              <h3>Pros</h3>
+              <ul>
+                <li>Balances throughput and response time</li>
+                <li>Prevents indefinite postponement</li>
+                <li>Good for systems with burst request patterns</li>
+              </ul>
+            </div>
+            <div class="algorithm-cons">
+              <h3>Cons</h3>
+              <ul>
+                <li>Complex implementation</li>
+                <li>Requires tuning of batch size N</li>
+                <li>May not be optimal for all workloads</li>
+              </ul>
+            </div>
+            <div class="algorithm-implementation">
+              <h3>Implementation</h3>
+              <div>
+                <p>Time Complexity</p>
+                <p class="complexity">O(n log n)</p>
+              </div>
+              <div>
+                <p>Visualization</p>
+                <button class="try-algorithm-btn" data-algorithm="nscan">Try in Simulator</button>
+              </div>
+            </div>
+          </div>
+          <div class="how-it-works">
+            <h3>How it works</h3>
+            <div class="algorithm-explanation">
+              <p>
+                N-Step SCAN divides the request queue into batches of N requests. It processes each batch using
+                SCAN, but only considers new requests for the next batch after the current batch is complete.
+              </p>
+              <div class="algorithm-visualization">
+                <div class="disk-timeline"></div>
+                <div class="disk-head" style="left: 25%"></div>
+                <div class="disk-positions">
+                  <div class="disk-position" style="left: 0%">0</div>
+                  <div class="disk-position" style="left: 50%">100</div>
+                  <div class="disk-position" style="left: 100%">200</div>
+                </div>
+                <div class="nscan-batches">
+                  <div class="batch">Batch 1</div>
+                  <div class="batch">Batch 2</div>
+                </div>
+              </div>
+              <p>
+                N-Step SCAN provides a good balance between throughput and response time. By processing requests
+                in batches, it prevents indefinite postponement while still maintaining reasonable seek
+                efficiency. The batch size N can be tuned to optimize performance for specific workloads.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Simulation Section -->
+      <section id="simulation" class="section">
+        <div class="section-header">
+          <h2 class="section-title">Interactive Disk Scheduling Simulator</h2>
+          <p class="section-description">Visualize and compare different disk scheduling algorithms in real-time</p>
+        </div>
+
+        <div class="simulation-grid">
+          <div class="simulation-controls">
+            <div class="control-group">
+              <label for="algorithm">Algorithm</label>
+              <select id="algorithm-select">
+                <option value="fcfs">FCFS (First-Come, First-Served)</option>
+                <option value="scan">SCAN (Elevator Algorithm)</option>
+                <option value="sstf">SSTF (Shortest Seek Time First)</option>
+                <option value="cscan">C-SCAN (Circular SCAN)</option>
+                <option value="look">LOOK</option>
+                <option value="clook">C-LOOK (Circular LOOK)</option>
+                <option value="wscan">Weighted SCAN</option>
+                <option value="nscan">N-Step SCAN</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label for="max-range">Disk Range (0 - <span id="max-range-value">200</span>)</label>
+              <input type="number" id="max-range" min="100" max="1000" value="200">
+            </div>
+
+            <div class="control-group">
+              <label for="initial-head">Initial Head Position (0 - <span id="max-head-value">200</span>)</label>
+              <input type="number" id="initial-head" min="0" max="200" value="53">
+            </div>
+
+            <div class="control-group">
+              <label for="requests">Request Queue (space-separated)</label>
+              <input type="text" id="requests" value="98 183 37 122 14">
+            </div>
+
+            <div class="control-group n-value-group hidden">
+              <label for="n-value">N Value (batch size)</label>
+              <input type="number" id="n-value" min="1" max="10" value="3">
+            </div>
+
+            <div class="control-group">
+              <label for="speed">Animation Speed</label>
+              <div class="speed-slider">
+                <span>Slow</span>
+                <input type="range" id="speed" min="0.5" max="5" step="0.5" value="1">
+                <span>Fast</span>
+              </div>
+            </div>
+
+            <div class="control-buttons">
+              <button id="start-btn" class="primary-button">
+                <span class="icon">▶</span> Start
+              </button>
+              <button id="pause-btn" class="secondary-button" disabled>
+                <span class="icon">⏸</span> Pause
+              </button>
+              <button id="reset-btn" class="secondary-button">
+                <span class="icon">↺</span> Reset
+              </button>
+              <button id="export-btn" class="secondary-button" disabled>
+                <span class="icon">↓</span> Export Report
+              </button>
+            </div>
+          </div>
+
+          <div class="simulation-results">
+            <div class="visualization-container">
+              <canvas id="disk-visualization"></canvas>
+            </div>
+
+            <div class="results-container">
+              <h3>Results</h3>
+              <div class="results-content">
+                <div>
+                  <p class="results-label">Sequence</p>
+                  <p id="sequence-result" class="sequence-display">Not calculated yet</p>
+                </div>
+                <div class="results-stats">
+                  <div>
+                    <p class="results-label">Total Seek Time</p>
+                    <p id="total-seek-time" class="results-value">0</p>
+                  </div>
+                  <div>
+                    <p class="results-label">Average Seek Time</p>
+                    <p id="average-seek-time" class="results-value">0.00</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="algorithm-comparison">
+          <h3>Algorithm Comparison</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Algorithm</th>
+                  <th>Advantages</th>
+                  <th>Disadvantages</th>
+                  <th>Best Use Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="algorithm-name purple">FCFS</td>
+                  <td>Simple, fair, no starvation</td>
+                  <td>High average seek time, poor performance</td>
+                  <td>Light disk loads with sequential access patterns</td>
+                </tr>
+                <tr>
+                  <td class="algorithm-name cyan">SCAN</td>
+                  <td>Better performance than FCFS, prevents starvation</td>
+                  <td>Favors middle tracks, may cause long waits</td>
+                  <td>Heavy disk loads with varied access patterns</td>
+                </tr>
+                <tr>
+                  <td class="algorithm-name pink">SSTF</td>
+                  <td>Minimizes seek time, good throughput</td>
+                  <td>Can cause starvation, overhead in calculations</td>
+                  <td>Systems prioritizing performance over fairness</td>
+                </tr>
+                <tr>
+                  <td class="algorithm-name blue">C-SCAN</td>
+                  <td>More uniform wait time than SCAN, good throughput</td>
+                  <td>Higher seek overhead when jumping back to start</td>
+                  <td>Systems with evenly distributed requests</td>
+                </tr>
+                <tr>
+                  <td class="algorithm-name amber">LOOK</td>
+                  <td>Improved SCAN, doesn't go to disk ends unnecessarily</td>
+                  <td>More complex implementation than SCAN</td>
+                  <td>Systems with requests not at disk extremes</td>
+                </tr>
+                <tr>
+                  <td class="algorithm-name emerald">C-LOOK</td>
+                  <td>Improved C-SCAN, reduced seek time</td>
+                  <td>More complex implementation than C-SCAN</td>
+                  <td>High-performance systems with clustered requests</td>
+                </tr>
+                <tr>
+                  <td class="algorithm-name violet">Weighted SCAN</td>
+                  <td>Prioritizes requests by importance</td>
+                  <td>Complex implementation, requires weight assignment</td>
+                  <td>Systems with varying request priorities</td>
+                </tr>
+                <tr>
+                  <td class="algorithm-name rose">N-Step SCAN</td>
+                  <td>Balances throughput and response time</td>
+                  <td>Complex implementation, batch size tuning needed</td>
+                  <td>Systems with burst request patterns</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="step-by-step-visualization">
+          <h3>Step-by-Step Visualization</h3>
+          <canvas id="step-visualization"></canvas>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <div class="container">
+        <p>© <span id="current-year"></span> Disk Scheduling Algorithms Visualizer</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
